@@ -25,9 +25,11 @@ public class PlantService {
         );
     }
 
+
     public List<Plant> getAllPlants(){
         return plantRepository.findAllByOrderBySpeciesIgnoreCaseAsc();
     }
+
 
     public Plant savePlant(Plant plant, Long gardenerId, List<Long> prospectIds){
         Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(
@@ -43,38 +45,41 @@ public class PlantService {
         return plantRepository.save(plant);
     }
 
+
     public void deletePlantById(Long id){
         plantRepository.deleteById(id);
     }
 
-    public void actualizarPlanta(Long idPlanta, Plant plantaActualizada, Long idJardinero, List<Long> idProspectos) {
-        Optional<Plant> plantaOptional = plantRepository.findById(idPlanta);
 
-        Gardener jardinero = gardenerRepository.findById(idJardinero)
+    public void updatePlanta(Long plantId, Plant updatedPlant, Long gardenerId, List<Long> prospectsId) {
+        Optional<Plant> plantaOptional = plantRepository.findById(plantId);
+
+        Gardener gardener = gardenerRepository.findById(gardenerId)
                 .orElseThrow(() -> new RuntimeException("No se encontró el jardinero con el id:"
-                        +idJardinero+" al momento de actualizar la planta"));
+                        +gardenerId+" al momento de actualizar la planta"));
 
-        if (idProspectos !=null) {
-            plantaActualizada.setAssociatedProspectus(prospectRepository.findAllById(idProspectos));
+        if (prospectsId !=null) {
+            updatedPlant.setAssociatedProspectus(prospectRepository.findAllById(prospectsId));
         }
 
-        plantaActualizada.setGardener(jardinero);
+        updatedPlant.setGardener(gardener);
 
-        Plant plantaExistente = construirPlanta(plantaActualizada, plantaOptional);
+        Plant plantaExistente = buildPlant(updatedPlant, plantaOptional);
         plantRepository.save(plantaExistente);
     }
 
-    private Plant construirPlanta(Plant plantaActualizada, Optional<Plant> plantaOptional) {
+
+    private Plant buildPlant(Plant updatedPlant, Optional<Plant> optionalPlant) {
         Plant.PlantBuilder plantaBuilder = Plant.builder();
 
-        plantaOptional.ifPresent(plantaExistente -> {
+        optionalPlant.ifPresent(plantaExistente -> {
             plantaBuilder
-                    .id(plantaActualizada.getId())
-                    .leafColor(plantaActualizada.getLeafColor())
-                    .species(plantaActualizada.getSpecies())
-                    .plantingDate(plantaActualizada.getPlantingDate())
-                    .gardener(plantaActualizada.getGardener())
-                    .associatedProspectus(plantaActualizada.getAssociatedProspectus());
+                    .id(plantaExistente.getId())
+                    .leafColor(updatedPlant.getLeafColor())
+                    .species(updatedPlant.getSpecies())
+                    .plantingDate(updatedPlant.getPlantingDate())
+                    .gardener(updatedPlant.getGardener())
+                    .associatedProspectus(updatedPlant.getAssociatedProspectus());
         });
 
         return plantaBuilder.build();

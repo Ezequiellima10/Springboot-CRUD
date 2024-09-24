@@ -1,9 +1,12 @@
 package com.example.java.service;
 
+import com.example.java.model.Plant;
 import com.example.java.model.Prospect;
 import com.example.java.repository.ProspectRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,5 +26,9 @@ public class ProspectService {
 
     public void deleteProspectById(Long id) {
          prospectRepository.deleteById(id);
+    }
+
+    public List<Prospect> getAllProspects(){
+        return prospectRepository.findAll();
     }
 }
