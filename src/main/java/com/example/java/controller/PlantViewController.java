@@ -43,9 +43,9 @@ public class PlantViewController {
         return "redirect:/plantas";
     }
 
-    @GetMapping("actualizarPlanta/{id]")
+    @GetMapping("actualizarPlanta/{id}")
     public String showUpdatePlantForm(@PathVariable Long plantId, Model model) {
-       model.addAttribute("Plant", plantService.getPlantById(plantId));
+       model.addAttribute("Plants", plantService.getPlantById(plantId));
        model.addAttribute("prospects", prospectService.getAllProspects());
 
         return "redirect:/actualizarPlanta";
@@ -58,7 +58,7 @@ public class PlantViewController {
     }
 
 
-    @GetMapping("eliminarPlanta/{id]")
+    @GetMapping("eliminarPlanta/{id}")
     public String deletePlant(@PathVariable Long id) {
         plantService.deletePlantById(id);
         return "redirect:/plantas";

@@ -1,6 +1,8 @@
 package com.example.java.controller;
 
-import ch.qos.logback.core.model.Model;
+import org.springframework.ui.Model;
+
+//import ch.qos.logback.core.model.Model;
 import com.example.java.service.GardenerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
